@@ -1,13 +1,17 @@
 {
-  "name": "Spotify AWS IOT Button",
+  "name": "spotify-aws-iot-button",
   "version": "1.0.0",
-  "description": "",
+  "description": "AWS iOT Spotify Button is a simple Express.js Node app that connects with Spotify's Track API and Playback API",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Alex Peta",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexpeta/spotify-aws-iot-button.git"
+  } ,
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.416.0",
