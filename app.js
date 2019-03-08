@@ -8,6 +8,9 @@ var helmet = require('helmet');
 var app = express();
 app.use(helmet());
 
+var SpotifyController = require('./Controllers/SpotifyController');
+var HealthController = require('./Controllers/HealthController');
+
 app.use(helmet.featurePolicy({
     features: {
       fullscreen: ["'self'"],
@@ -21,8 +24,8 @@ app.use(helmet.ieNoOpen());
 app.use(helmet.noSniff());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 
-var SpotifyController = require('./Controllers/SpotifyController');
 app.use('/api/spotify', SpotifyController);
+app.use('/api/health', HealthController);
 
 var server = app.listen(port, function() {
   console.log('Express server listening on port ' + port);
