@@ -1,5 +1,5 @@
 {
-  "name": "test-service",
+  "name": "Spotify AWS IOT Button",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
