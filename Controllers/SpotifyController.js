@@ -17,7 +17,7 @@ router.post('/next', function(request, response) {
             return response.status(200).send({ message: managerResults });
         })
         .catch(err => {
-            return response.status(500).send({ message: err.message, stack: err.stack });
+            return response.status(500).send(err);
         });
 });
 
@@ -25,14 +25,14 @@ router.post('/previous', function(request, response){
     spotifyTokenManager.GetTokenAsync()
     .then(tokenModel => spotifyManager.PreviousTrackAsync(tokenModel))
     .then(managerResults => response.status(200).send({message: managerResults}))
-    .catch(err => response.status(500).send({message: err.message, stack:err.stack}));
+    .catch(err => response.status(500).send(err));
 });
 
 router.post('/pause', function(request, response){
     spotifyTokenManager.GetTokenAsync()
     .then(tokenModel => spotifyManager.PauseAsync(tokenModel))
     .then(managerResults => response.status(200).send({message: managerResults}))
-    .catch(err => response.status(500).send({message: err.message, stack:err.stack}));
+    .catch(err => response.status(500).send(err));
 });
 
 

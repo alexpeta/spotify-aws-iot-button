@@ -28,7 +28,8 @@ function MakeHttpCallAsync(options)
                 }
                 else
                 {
-                    reject(new Error({message: body}));
+                    reject(new Error(body));
+                    return;
                 }
             }
             resolve(body);
@@ -52,10 +53,10 @@ function NextTrackAsync(token)
 
         MakeHttpCallAsync(nextTrackHttpRequestOptions)
             .then(results => {
-                return resolve(results);
+                resolve(results);
             })
             .catch(err => {
-                return reject(err);
+                reject(err);
             });
     });
 }
