@@ -10,23 +10,29 @@ router.use(bodyParser.json());
 
 router.post('/next', function(request, response) {
     spotifyTokenManager.GetTokenAsync()
-        .then(tokenModel => spotifyManager.NextTrackAsync(tokenModel))
-        .then(response.status(200).send({message:'next track change triggered'}))
-        .catch(err => response.status(500).send({message:err.message, stack:err.stack}));
+        .then(tokenModel => {
+            return spotifyManager.NextTrackAsync(tokenModel);
+        })
+        .then(managerResults => {
+            return response.status(200).send({ message: managerResults });
+        })
+        .catch(err => {
+            return response.status(500).send({ message: err.message, stack: err.stack });
+        });
 });
 
 router.post('/previous', function(request, response){
     spotifyTokenManager.GetTokenAsync()
     .then(tokenModel => spotifyManager.PreviousTrackAsync(tokenModel))
-    .then(response.status(200).send({message:'previous track change triggered'}))
-    .catch(err => response.status(500).send({message:err.message, stack:err.stack}));
+    .then(managerResults => response.status(200).send({message: managerResults}))
+    .catch(err => response.status(500).send({message: err.message, stack:err.stack}));
 });
 
 router.post('/pause', function(request, response){
     spotifyTokenManager.GetTokenAsync()
     .then(tokenModel => spotifyManager.PauseAsync(tokenModel))
-    .then(response.status(200).send({message:'pause triggered'}))
-    .catch(err => response.status(500).send({message:err.message, stack:err.stack}));
+    .then(managerResults => response.status(200).send({message: managerResults}))
+    .catch(err => response.status(500).send({message: err.message, stack:err.stack}));
 });
 
 

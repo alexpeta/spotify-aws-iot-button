@@ -23,13 +23,15 @@ function MakeHttpCallAsync(options)
                 {
                     spotifyTokenManager.GetTokenAsync(forced)
                         .then(result => resolve(result))
-                        .catch(err => reject(err));                
+                        .catch(err => reject(err));  
+                    return;              
                 }
                 else
                 {
-                    reject(err);
+                    reject(new Error({message: body}));
                 }
             }
+            resolve(body);
         });
     });
 }
@@ -49,8 +51,12 @@ function NextTrackAsync(token)
         };
 
         MakeHttpCallAsync(nextTrackHttpRequestOptions)
-            .then(results => resolve(results))
-            .catch(err => reject(err));
+            .then(results => {
+                return resolve(results);
+            })
+            .catch(err => {
+                return reject(err);
+            });
     });
 }
 

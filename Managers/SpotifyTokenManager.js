@@ -9,10 +9,31 @@ function IsTokenExpired(awsTokenModel)
     return moment() >= (moment(awsTokenModel.lastUpdated.S,'MM/DD/YY HH:MM:SS').add(parseInt(awsTokenModel.expiresIn.N),'seconds') + constants.TOKEN_DELTA_SECONDS);
 }
 
-function MakeSpotifyRefreshTokenRequestAsync()
+function GetRefreshTokenAsync()
 {
-    return new Promise(function(resolve,reject){
+    if (process.env.SPOTIFY_REFRESH_TOKEN)
+    {
+        return Promise.resolve(process.env.SPOTIFY_REFRESH_TOKEN);
+    }
+
+    return new Promise(function(resolve, reject){
+        awsManager.getAsync('refresh')
+            .then(function(awsRefreshModel){
+                process.env.SPOTIFY_REFRESH_TOKEN = awsRefreshModel.token.S;
+                resolve(awsRefreshModel.token.S);
+            })
+            .catch(function(awsError){
+                reject(awsError);
+            });
+    });
+}
+
+
+function MakeSpotifyRefreshTokenRequestAsync(refreshToken)
+{
+    return new Promise(function(resolve,reject) {
         let basicAuth = stringUtils.toBase64(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`);
+        
 
         let requestOptions = {
             url:'https://accounts.spotify.com/api/token',
@@ -24,7 +45,7 @@ function MakeSpotifyRefreshTokenRequestAsync()
             },
             form: {
                 'grant_type': 'refresh_token',
-                'refresh_token': process.env.SPOTIFY_REFRESH_TOKEN
+                'refresh_token': refreshToken
             }
         };
     
@@ -38,8 +59,12 @@ function MakeSpotifyRefreshTokenRequestAsync()
 
             let model = JSON.parse(body);
             awsManager.upsertTokenAsync('access', model.access_token, model.expires_in)
-                .then(ok => resolve(model))
-                .catch(awsError => reject(awsError));
+                .then(ok => {
+                    return resolve(model);
+                })
+                .catch(awsError => {
+                    return reject(awsError);
+                });
         });
     });
 }
@@ -47,10 +72,10 @@ function MakeSpotifyRefreshTokenRequestAsync()
 function GetTokenAsync(forced)
 {
     return new Promise(function(resolve, reject) {
-
-        if(forced)
+        if (forced)
         {
-            MakeSpotifyRefreshTokenRequestAsync()
+            GetRefreshTokenAsync()
+                //.then(refreshToken => MakeSpotifyRefreshTokenRequestAsync(refreshToken))
                 .then(newAwsModel => resolve(newAwsModel))
                 .catch(function(awsError){
                     reject(awsError);
@@ -65,7 +90,8 @@ function GetTokenAsync(forced)
                         return awsTokenModel;
                     }
                 })
-                .then(oldAwsModel => MakeSpotifyRefreshTokenRequestAsync())
+                .then(oldAwsModel => GetRefreshTokenAsync())
+                .then(refreshToken => MakeSpotifyRefreshTokenRequestAsync(refreshToken))
                 .then(newAwsModel => resolve(newAwsModel))
                 .catch(function(awsError){
                     reject(awsError);
