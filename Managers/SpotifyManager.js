@@ -21,7 +21,7 @@ function MakeHttpCallAsync(options)
                 //401 = The access token has expired and we will refresh
                 if (parseInt(httpResponse.statusCode,10) === 401)
                 {
-                    spotifyTokenManager.GetTokenAsync(forced)
+                    spotifyTokenManager.GetNewTokenAsync(true)
                         .then(result => resolve(result))
                         .catch(err => reject(err));  
                     return;              

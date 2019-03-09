@@ -28,13 +28,11 @@ function GetRefreshTokenAsync()
     });
 }
 
-
-function MakeSpotifyRefreshTokenRequestAsync(refreshToken)
+function MakeSpotifyHttpCallAsync(refreshToken)
 {
     return new Promise(function(resolve,reject) {
         let basicAuth = stringUtils.toBase64(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`);
         
-
         let requestOptions = {
             url:'https://accounts.spotify.com/api/token',
             headers: {
@@ -69,13 +67,13 @@ function MakeSpotifyRefreshTokenRequestAsync(refreshToken)
     });
 }
 
-function GetTokenAsync(forced)
+function GetNewTokenAsync(forced)
 {
     return new Promise(function(resolve, reject) {
         if (forced)
         {
             GetRefreshTokenAsync()
-                //.then(refreshToken => MakeSpotifyRefreshTokenRequestAsync(refreshToken))
+                .then(refreshToken => MakeSpotifyHttpCallAsync(refreshToken))
                 .then(newAwsModel => resolve(newAwsModel))
                 .catch(function(awsError){
                     reject(awsError);
@@ -91,7 +89,7 @@ function GetTokenAsync(forced)
                     }
                 })
                 .then(oldAwsModel => GetRefreshTokenAsync())
-                .then(refreshToken => MakeSpotifyRefreshTokenRequestAsync(refreshToken))
+                .then(refreshToken => MakeSpotifyHttpCallAsync(refreshToken))
                 .then(newAwsModel => resolve(newAwsModel))
                 .catch(function(awsError){
                     reject(awsError);
@@ -101,5 +99,5 @@ function GetTokenAsync(forced)
 }
 
 module.exports ={
-    GetTokenAsync: GetTokenAsync
+    GetNewTokenAsync: GetNewTokenAsync
 }

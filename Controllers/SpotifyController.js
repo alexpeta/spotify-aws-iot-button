@@ -9,7 +9,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 router.post('/next', function(request, response) {
-    spotifyTokenManager.GetTokenAsync()
+    spotifyTokenManager.GetNewTokenAsync()
         .then(tokenModel => {
             return spotifyManager.NextTrackAsync(tokenModel);
         })
@@ -22,14 +22,14 @@ router.post('/next', function(request, response) {
 });
 
 router.post('/previous', function(request, response){
-    spotifyTokenManager.GetTokenAsync()
+    spotifyTokenManager.GetNewTokenAsync()
     .then(tokenModel => spotifyManager.PreviousTrackAsync(tokenModel))
     .then(managerResults => response.status(200).send({message: managerResults}))
     .catch(err => response.status(500).send(err));
 });
 
 router.post('/pause', function(request, response){
-    spotifyTokenManager.GetTokenAsync()
+    spotifyTokenManager.GetNewTokenAsync()
     .then(tokenModel => spotifyManager.PauseAsync(tokenModel))
     .then(managerResults => response.status(200).send({message: managerResults}))
     .catch(err => response.status(500).send(err));
