@@ -18,7 +18,7 @@ router.use(function(req, res, next) {
 router.get("/ping", function(request, response) {
   var correlationId = request.headers[constants.HEADERS_X_CORRELATION_ID];
   var logger = LoggerFactory.BuildLogger(correlationId);
-  logger.err("ping", "this is a test");
+  logger.info("ping", "ping-pong");
   response.status(200).send({ message: "pong", correlationId: correlationId });
 });
 

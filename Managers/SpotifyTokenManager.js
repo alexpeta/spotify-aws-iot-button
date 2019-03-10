@@ -5,14 +5,7 @@ var constants = require("../Utils/Constants");
 var moment = require("moment");
 
 function IsTokenExpired(awsTokenModel) {
-  return (
-    moment() >=
-    moment(awsTokenModel.lastUpdated.S, "MM/DD/YY HH:MM:SS").add(
-      parseInt(awsTokenModel.expiresIn.N),
-      "seconds"
-    ) +
-      constants.TOKEN_DELTA_SECONDS
-  );
+  return (moment() >= moment(awsTokenModel.lastUpdated.S, "MM/DD/YY HH:MM:SS").add(parseInt(awsTokenModel.expiresIn.N),"seconds") + constants.TOKEN_DELTA_SECONDS);
 }
 
 function GetRefreshTokenAsync() {
@@ -22,7 +15,7 @@ function GetRefreshTokenAsync() {
 
   return new Promise(function(resolve, reject) {
     awsManager
-      .getAsync("refresh")
+      .getAsync(constants.TOKEN_KEY_ACCESS)
       .then(function(awsRefreshModel) {
         process.env.SPOTIFY_REFRESH_TOKEN = awsRefreshModel.token.S;
         resolve(awsRefreshModel.token.S);
@@ -62,12 +55,9 @@ function MakeSpotifyHttpCallAsync(refreshToken) {
 
       let model = JSON.parse(body);
       awsManager
-        .upsertTokenAsync("access", model.access_token, model.expires_in)
+        .upsertTokenAsync(constants.TOKEN_KEY_ACCESS, model.access_token, model.expires_in)
         .then(ok => {
-          console.log(
-            "[SpotifyTokenManager][MakeSpotifyHttpCallAsync] success : " +
-              JSON.stringify(model)
-          );
+          console.log( "[SpotifyTokenManager][MakeSpotifyHttpCallAsync] success : " +JSON.stringify(model));
           resolve(model);
         })
         .catch(awsError => {
@@ -88,7 +78,7 @@ function GetNewTokenAsync(forced) {
         });
     } else {
       awsManager
-        .getAsync("access")
+        .getAsync(constants.TOKEN_KEY_ACCESS)
         .then(function(awsTokenModel) {
           if (awsTokenModel && !IsTokenExpired(awsTokenModel)) {
             return awsTokenModel;
