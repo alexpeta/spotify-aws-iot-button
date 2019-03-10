@@ -2,15 +2,16 @@
 
 [![CircleCI](https://circleci.com/gh/alexpeta/spotify-aws-iot-button.svg?style=svg)](https://circleci.com/gh/alexpeta/spotify-aws-iot-button)
 
-## Description
-AWS iOT Spotify Button is a simple Express.js Node app that connects with Spotify's Track API and Playback API. 
+## Motivation
+AWS iOT Spotify Button is a simple Express.js Node app that connects with Spotify's Track API and Playback API's.
 It is part of a solution that lets an AWS IoT button control the users playbback options.
 It has three features :
-- Next track
-- Previous track
-- Pause
+- Next track (single press)
+- Previous track (double press)
+- Pause (long press)
 
-Each feature maps to one of 3 states that an AWS programmable button has : single press, double press and long press;
+## Flow Diagram
+![Flow Diagram](https://i.imgur.com/r7qEq3R.png "Flow Diagram")
 
 ## Prerequisites
 
