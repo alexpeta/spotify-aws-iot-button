@@ -58,10 +58,11 @@ function MakeSpotifyHttpCallAsync(refreshToken)
             let model = JSON.parse(body);
             awsManager.upsertTokenAsync('access', model.access_token, model.expires_in)
                 .then(ok => {
-                    return resolve(model);
+                    console.log('[SpotifyTokenManager][MakeSpotifyHttpCallAsync] success : ' + JSON.stringify(model))
+                    resolve(model);
                 })
                 .catch(awsError => {
-                    return reject(awsError);
+                    reject(awsError);
                 });
         });
     });
