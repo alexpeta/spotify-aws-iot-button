@@ -1,6 +1,6 @@
 {
   "name": "spotify-aws-iot-button",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "AWS iOT Spotify Button is a simple Express.js Node app that connects with Spotify's Track API and Playback API",
   "main": "app.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.0",
     "moment": "^2.24.0",
     "request": "^2.88.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1"
   }
 }
