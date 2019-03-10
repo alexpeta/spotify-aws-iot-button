@@ -24,7 +24,6 @@
     "jsonwebtoken": "^8.5.0",
     "moment": "^2.24.0",
     "request": "^2.88.0",
-    "uuid": "^3.3.2",
-    "winston": "^3.2.1"
+    "uuid": "^3.3.2"
   }
 }
