@@ -8,8 +8,8 @@ var helmet = require("helmet");
 var app = express();
 app.use(helmet());
 
-var SpotifyController = require("./Controllers/SpotifyController");
-var HealthController = require("./Controllers/HealthController");
+var SpotifyController = require("./src/Controllers/SpotifyController");
+var HealthController = require("./src/Controllers/HealthController");
 
 app.use(
   helmet.featurePolicy({
