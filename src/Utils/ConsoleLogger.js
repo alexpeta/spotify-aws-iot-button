@@ -14,12 +14,12 @@ class ConsoleLogger {
   constructor(correlationId) {
     this.correlationId = correlationId;
   }
-  err(method, message) {
-    let logMessage = `${new moment().format(timeStampFormat)}|ERROR|${method}|${this.correlationId}|${message}`;
-    console.log(logMessage);
+  err(message) {
+    let logMessage = `${new moment().format(timeStampFormat)}|ERROR|${this.correlationId}|${message}`;
+    console.error(logMessage);
   }
-  info(method, message) {
-    let logMessage = `${new moment().format(timeStampFormat)}|INFO|${method}|${this.correlationId}|${message}`;
+  info(message) {
+    let logMessage = `${new moment().format(timeStampFormat)}|INFO|${this.correlationId}|${message}`;
     console.info(logMessage);
   }
 }

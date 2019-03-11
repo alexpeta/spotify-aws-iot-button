@@ -15,11 +15,7 @@ function upsertTokenAsync(type, token, expiresIn) {
         token: { S: token },
         lastUpdated: { S: moment().format("MM/DD/YY HH:MM:SS") },
         expiresIn: { N: expiresIn.toString() },
-        expiresAt: {
-          S: moment()
-            .add(expiresIn, "seconds")
-            .format("MM/DD/YY HH:MM:SS")
-        }
+        expiresAt: { S: moment().add(expiresIn, "seconds").format("MM/DD/YY HH:MM:SS") }
       }
     };
 
@@ -37,9 +33,7 @@ function upsertTokenAsync(type, token, expiresIn) {
 function getAsync(type) {
   var params = {
     TableName: constants.TOKEN_TABLE_NAME,
-    Key: {
-      type: { S: type }
-    }
+    Key: { type: { S: type } }
   };
 
   return new Promise(function(resolve, reject) {

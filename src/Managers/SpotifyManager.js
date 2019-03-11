@@ -5,17 +5,13 @@ function MakeHttpCallAsync(options) {
   return new Promise(function(resolve, reject) {
     request(options, function(err, httpResponse, body) {
       if (err) {
-        console.log(
-          "[MakeHttpCallAsync][request.post] Error when calling Spotify's track api: "
-        );
+        console.log("[MakeHttpCallAsync][request.post] Error when calling Spotify's track api: ");
         reject(err);
         return;
       }
 
       if (Math.floor(parseInt(httpResponse.statusCode, 10) / 100) === 4) {
-        console.log(
-          "[MakeHttpCallAsync][request.post] spotify player error: " + body
-        );
+        console.log("[MakeHttpCallAsync][request.post] spotify player error: " + body);
 
         //401 = The access token has expired and we will refresh
         if (parseInt(httpResponse.statusCode, 10) === 401) {
