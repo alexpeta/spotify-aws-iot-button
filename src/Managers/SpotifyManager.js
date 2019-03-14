@@ -1,31 +1,38 @@
 var request = require("request");
 var spotifyTokenManager = require("./SpotifyTokenManager");
 
-function MakeHttpCallAsync(options) {
+function MakeHttpCallAsync(options){
   return new Promise(function(resolve, reject) {
     request(options, function(err, httpResponse, body) {
       if (err) {
-        console.log("[MakeHttpCallAsync][request.post] Error when calling Spotify's track api: ");
+        console.error("Spotify error: " + err);
         reject(err);
         return;
       }
 
-      if (Math.floor(parseInt(httpResponse.statusCode, 10) / 100) === 4) {
-        console.log("[MakeHttpCallAsync][request.post] spotify player error: " + body);
-
-        //401 = The access token has expired and we will refresh
-        if (parseInt(httpResponse.statusCode, 10) === 401) {
+      if (Math.floor((httpResponse.statusCode / 100) === 2))
+      {
+        console.info("HTTP call successfull: " + JSON.stringify(options));
+        resolve(body);
+      }
+      else
+      {
+        if (httpResponse.statusCode === 401) {
+          logger.err("Token is expired, making refresh call " + body);
           spotifyTokenManager
             .GetNewTokenAsync(true)
-            .then(result => resolve(result))
-            .catch(err => reject(err));
-          return;
+            .then(result => {
+              console.info("Refresh token successfull:" + result);
+              resolve(result);
+            })
+            .catch(err => {
+              console.error("Refresh token failed:" + err)
+              reject(err);
+            });
         } else {
           reject(new Error(body));
-          return;
         }
       }
-      resolve(body);
     });
   });
 }
